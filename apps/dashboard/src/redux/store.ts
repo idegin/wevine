@@ -13,6 +13,9 @@ import storage from 'redux-persist/lib/storage/session'
 import authSlice from './features/auth.slice'
 import viewSlice from './features/view.slice'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
+import { authApi } from './services/auth.services'
+import { userApi } from './services/user.services'
+import { skillApi } from './services/skill.services'
 
 
 const persistConfig = {
@@ -31,17 +34,17 @@ export const store = configureStore({
 		app: persistedReducer,
 		view: viewSlice,
 
-        // Services
-		// [authApi.reducerPath]: authApi.reducer,
+		// Services
+		[authApi.reducerPath]: authApi.reducer,
+		[userApi.reducerPath]: userApi.reducer,
+		[skillApi.reducerPath]: skillApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
-		}).concat([
-			// authApi.middleware,
-		]),
+		}).concat([authApi.middleware, userApi.middleware, skillApi.middleware]),
 })
 
 setupListeners(store.dispatch)

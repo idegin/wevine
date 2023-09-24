@@ -9,6 +9,8 @@ import '../../public/assets/css/bootstrap.min.css'
 
 import './globals.css'
 import Providers from '@/components/Providers'
+import AppLoading from '@/components/AppLoading'
+import MasterControl from '@/MasterControl'
 
 export const metadata: Metadata = {
 	title: meta.title,
@@ -36,6 +38,8 @@ export default function RootLayout({
 			</head>
 			<body>
 				<Providers>
+					<AppLoading />
+					<MasterControl />
 					{children}
 				</Providers>
 			</body>

@@ -1,20 +1,28 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SideNav from './SideNav'
 import PageContainer from './PageContainer'
 import LoginPage from '../pages/login/LoginPage'
 import { useSelector } from 'react-redux'
-import { AppStore } from '@/app/types/store.types'
+import { AppStore } from '@/types/store.types'
 
 type Props = {
 	children: any
-    title: string
-    name: string
+	title: string
+	name: string
 }
 
 export default function DefaultLayout({ children, name, title }: Props) {
+	const [ready, setReady] = useState(false)
+	const { user } = useSelector((store: AppStore) => store.app.auth)
 
-	const { user } = useSelector((store:AppStore) => store.app.auth)
+	useEffect(() => {
+		setReady(true)
+	}, [])
+
+	if (!ready) {
+		return null
+	}
 
 	if (!user) {
 		return <LoginPage />
@@ -27,10 +35,8 @@ export default function DefaultLayout({ children, name, title }: Props) {
 			>
 				<SideNav activePage={name} />
 			</div>
-			<main className="main-content" style={{ minHeight: '100vh'}}>
-				<PageContainer title={title}>
-					{children}
-					</PageContainer>
+			<main className="main-content" style={{ minHeight: '100vh' }}>
+				<PageContainer title={title}>{children}</PageContainer>
 			</main>
 		</div>
 	)

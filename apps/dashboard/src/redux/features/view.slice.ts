@@ -2,18 +2,20 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export interface ViewState {
 	show_left_nav: boolean
+	app_loading: boolean
 }
 
 const initialState: ViewState = {
 	show_left_nav: true,
+	app_loading: true
 }
 
 export const viewSlice = createSlice({
 	name: 'auth',
 	initialState,
 	reducers: {
-		setViewState: (state) => {
-			return { ...state }
+		setViewState: (state, action) => {
+			return { ...state, ...action.payload }
 		},
 	},
 })

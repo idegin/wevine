@@ -1,27 +1,43 @@
+'use client'
 import CRUDTable from '@/components/atoms/CRUDTable'
+import { SkillData } from '@/types/option.types'
 import React from 'react'
 import { HiFunnel, HiOutlinePlus } from 'react-icons/hi2'
+import moment from 'moment'
 
-type Props = {}
+type Props = {
+	skills: SkillData[]
+}
 
-export default function SkillsPage({}: Props) {
+export default function SkillsPage({ skills }: Props) {
 	return (
 		<div>
 			<CRUDTable
-				columns={[{ title: 'Name' }, { title: 'Slug' }]}
-				selectable
-				rows={[
-					{
-						id: Math.random().toString(),
-						image_url:
-							'https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png',
-						items: [
-							{ type: 'text', value: 'Angular' },
-							{ type: 'text', value: 'angular-js' },
-						],
-					},
+				columns={[
+					{ title: 'Name' },
+					{ title: 'Slug' },
+					{ title: 'Created' },
+					{ title: 'Updated' },
 				]}
-
+				selectable
+				rows={skills.map((skill) => ({
+					id: skill.id,
+					image_url: skill.icon_url,
+					items: [
+						{ type: 'text', value: skill.name, style: { minWidth: '150px' } },
+						{ type: 'text', value: skill.slug },
+						{
+							type: 'text',
+							value: moment(skill.createdAt).fromNow(),
+							style: { minWidth: '150px' },
+						},
+						{
+							type: 'text',
+							value: moment(skill.updatedAt).fromNow(),
+							style: { minWidth: '150px' },
+						},
+					],
+				}))}
 				actionButtons={
 					<>
 						<button
@@ -45,9 +61,7 @@ export default function SkillsPage({}: Props) {
 						</button>
 					</>
 				}
-			>
-				
-			</CRUDTable>
+			></CRUDTable>
 		</div>
 	)
 }

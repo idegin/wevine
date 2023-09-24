@@ -1,11 +1,51 @@
+import WButton from '@/components/atoms/WButton'
 import React, { useState } from 'react'
 import { HiEye, HiEyeSlash } from 'react-icons/hi2'
 import { metadata } from 'variables'
+import { useLoginMutation } from '@/redux/services/auth.services'
+import { useToast } from '@chakra-ui/react'
+import { AuthUser } from '@/types/auth.types'
+import Cookies from 'js-cookie'
+import { setViewState } from '@/redux/features/view.slice'
+import { useDispatch } from 'react-redux'
 
 type Props = {}
 
 export default function LoginForm({}: Props) {
+	const [login, { isLoading }] = useLoginMutation()
 	const [showPassword, setShowPassword] = useState(false)
+	const toast = useToast()
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const dispatch = useDispatch()
+
+	const onSubmit = async (e: React.FocusEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		let res: any = await login({
+			email: email.toLowerCase().trim(),
+			password: password.trim(),
+		})
+		if ('data' in res) {
+			let userData: AuthUser = res.data.user
+			if (
+				userData.permissions.includes('admin') ||
+				userData.permissions.includes('senior-manager')
+			) {
+				Cookies.set('we_auth', res.data.jwt, { expires: 1 })
+			} else {
+				Cookies.set('we_auth', res.data.jwt, { expires: 30 })
+			}
+			dispatch(setViewState({ app_loading: true }))
+			window.location.reload()
+		} else {
+			toast({
+				title: res?.error?.data?.message,
+				status: 'error',
+				position: 'top',
+			})
+		}
+	}
+
 	return (
 		<div className="p-lg-5 p-4">
 			<div>
@@ -16,7 +56,7 @@ export default function LoginForm({}: Props) {
 			</div>
 
 			<div className="mt-4">
-				<form className="needs-validation">
+				<form className="needs-validation" onSubmit={onSubmit}>
 					<div className="mb-3">
 						<label htmlFor="email" className="form-label">
 							Email <span className="text-danger">*</span>
@@ -27,13 +67,13 @@ export default function LoginForm({}: Props) {
 							id="email"
 							placeholder="Enter email address"
 							required
+							onChange={(e) => setEmail(e.target.value)}
 						/>
-						<div className="invalid-feedback">Please enter email</div>
 					</div>
 
 					<div className="mb-3">
 						<label className="form-label" htmlFor="password-input">
-							Password
+							Password <span className="text-danger">*</span>
 						</label>
 						<div className="position-relative auth-pass-inputgroup">
 							<input
@@ -43,6 +83,7 @@ export default function LoginForm({}: Props) {
 								id="password-input"
 								aria-describedby="passwordInput"
 								required
+								onChange={(e) => setPassword(e.target.value)}
 							/>
 							<button
 								className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon h-100"
@@ -56,7 +97,6 @@ export default function LoginForm({}: Props) {
 									<HiEye className="align-middle" />
 								)}
 							</button>
-							<div className="invalid-feedback">Please enter password</div>
 						</div>
 					</div>
 
@@ -73,9 +113,9 @@ export default function LoginForm({}: Props) {
 					</div> */}
 
 					<div className="mt-4">
-						<button className="btn btn-success w-100" type="submit">
+						<WButton type="submit" w="full" isLoading={isLoading}>
 							Sign Up
-						</button>
+						</WButton>
 					</div>
 
 					{/* <div className="mt-4 text-center">
@@ -119,8 +159,8 @@ export default function LoginForm({}: Props) {
 				<p className="mb-0">
 					Are you a client ?{' '}
 					<a
-						href="auth-signin-cover.html"
-						className="fw-semibold text-primary text-decoration-underline"
+						href="/"
+						className="fw-semibold text-theme fw-bold text-decoration-underline"
 					>
 						{' '}
 						login here
