@@ -3,8 +3,10 @@
 import React from 'react'
 import { CacheProvider } from '@chakra-ui/next-js'
 import { ChakraProvider } from '@chakra-ui/react'
-
+import { Provider as ReduxProvider } from 'react-redux'
 import { extendTheme } from '@chakra-ui/react'
+import { store } from '@/redux/store'
+import { Next13ProgressBar } from 'next13-progressbar'
 
 const colors = {
 	theme: '#5BBB7B',
@@ -19,9 +21,19 @@ export const theme = extendTheme({ colors })
 export default function Providers({ children }: any) {
 	return (
 		<>
-			<CacheProvider>
-				<ChakraProvider theme={theme}>{children}</ChakraProvider>
-			</CacheProvider>
+			<ReduxProvider store={store}>
+				<CacheProvider>
+					<ChakraProvider theme={theme}>
+						{children}
+					<Next13ProgressBar
+						height="4px"
+						color="#5BBB7B"
+						options={{ showSpinner: true }}
+						showOnShallow
+					/>
+						</ChakraProvider>
+				</CacheProvider>
+			</ReduxProvider>
 		</>
 	)
 }

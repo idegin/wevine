@@ -17,10 +17,16 @@ import {
 	HiStar,
 } from 'react-icons/hi2'
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
 
-type Props = {}
+type Props = {
+	activePage: string
+}
 
-export default function SideNav({}: Props) {
+export default function SideNav({activePage}: Props) {
+
+	const router = useRouter()
+
 	return (
 		<>
 			<Flex
@@ -49,28 +55,28 @@ export default function SideNav({}: Props) {
 					px="4"
 				>
 					<EachNavSection title="Pages">
-						<EachNav title="Overview" Icon={HiChartBar} active />
-						<EachNav title="Gigs" Icon={HiBriefcase} />
-						<EachNav title="Payments" Icon={HiWallet} />
-						<EachNav title="Messages" Icon={HiChatBubbleOvalLeft} />
-						<EachNav title="Notifications" Icon={HiMiniBell} />
+						<EachNav onClick={() => router.push('/')} title="Overview" Icon={HiChartBar} active={activePage === 'overview'} />
+						<EachNav onClick={() => {}} title="Gigs" Icon={HiBriefcase} />
+						<EachNav onClick={() => {}} title="Payments" Icon={HiWallet} />
+						<EachNav onClick={() => {}} title="Messages" Icon={HiChatBubbleOvalLeft} />
+						<EachNav onClick={() => {}} title="Notifications" Icon={HiMiniBell} />
 					</EachNavSection>
 					<EachNavSection title="Clients">
-						<EachNav title="Overview" Icon={HiChartBar} />
-						<EachNav title="Project" Icon={HiDocumentText} />
-						<EachNav title="Invoice" Icon={HiNewspaper} />
+						<EachNav onClick={() => {}} title="Overview" Icon={HiChartBar} />
+						<EachNav onClick={() => {}} title="Project" Icon={HiDocumentText} />
+						<EachNav onClick={() => {}} title="Invoice" Icon={HiNewspaper} />
 					</EachNavSection>
 					<EachNavSection title="Content">
-						<EachNav title="Job Titles" Icon={HiBookmark} />
-						<EachNav title="Skills" Icon={HiStar} />
-						<EachNav title="Users" Icon={HiUsers} />
+						<EachNav onClick={() => {}} title="Job Titles" Icon={HiBookmark} />
+						<EachNav onClick={() => router.push('/manager/skills')} title="Skills" Icon={HiStar} active={activePage === 'skills'} />
+						<EachNav onClick={() => router.push('/manager/users')} title="Users" Icon={HiUsers} active={activePage === 'users'} />
 					</EachNavSection>
 					<EachNavSection title="Management">
-						<EachNav title="Projects" Icon={HiDocumentText} />
-						<EachNav title="Clients" Icon={HiBuildingStorefront} />
-						<EachNav title="Project Requests" Icon={HiMegaphone} />
-						<EachNav title="Invoice" Icon={HiNewspaper} />
-						<EachNav title="Activity Logs" Icon={HiCircleStack} />
+						<EachNav onClick={() => {}} title="Projects" Icon={HiDocumentText} />
+						<EachNav onClick={() => {}} title="Clients" Icon={HiBuildingStorefront} />
+						<EachNav onClick={() => {}} title="Project Requests" Icon={HiMegaphone} />
+						<EachNav onClick={() => {}} title="Invoice" Icon={HiNewspaper} />
+						<EachNav onClick={() => {}} title="Activity Logs" Icon={HiCircleStack} />
 					</EachNavSection>
 					{/* <EachNavSection title="Admins"></EachNavSection> */}
 				</Flex>
@@ -78,7 +84,7 @@ export default function SideNav({}: Props) {
 					h="60px"
 					alignItems={'center'}
 					gap={3}
-					px={'2'}
+					px={'6'}
 					justifyContent={'space-between'}
 				>
 					<Flex gap={3} alignItems={'center'} cursor={'pointer'}>
@@ -103,13 +109,16 @@ const EachNav = ({
 	active,
 	title,
 	Icon,
+	onClick,
 }: {
 	active?: boolean
 	title: string
 	Icon: any
+	onClick: () => void
 }) => {
 	return (
 		<Flex
+			onClick={onClick}
 			_hover={{
 				color: 'theme_darker',
 				backgroundColor: 'theme_light',

@@ -1,3 +1,8 @@
+:root {
+  --theme-color: #5BBB7B;
+  --theme-color-darker: #1F4B3F;
+  --theme-color-lighter: #5bbb7b1a;
+}
 
 * {
 	/* font-family: 'Raleway', sans-serif !important; */
@@ -22,4 +27,20 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #0aa9355b;
+}
+
+
+
+
+.bg-theme {
+  background-color: var(--theme-color) !important;
+}
+.text-theme {
+  color: var(--theme-color) !important;
+}
+.bg-theme-darker {
+  background-color: var(--theme-color-darker) !important;
+}
+.bg-theme-lighter {
+  background-color: var(--theme-color-lighter) !important;
 }
