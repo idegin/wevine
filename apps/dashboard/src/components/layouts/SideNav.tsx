@@ -14,6 +14,7 @@ import {
 	HiMegaphone,
 	HiNewspaper,
 	HiCircleStack,
+	HiStar,
 } from 'react-icons/hi2'
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 
@@ -54,13 +55,19 @@ export default function SideNav({}: Props) {
 						<EachNav title="Messages" Icon={HiChatBubbleOvalLeft} />
 						<EachNav title="Notifications" Icon={HiMiniBell} />
 					</EachNavSection>
+					<EachNavSection title="Clients">
+						<EachNav title="Overview" Icon={HiChartBar} />
+						<EachNav title="Project" Icon={HiDocumentText} />
+						<EachNav title="Invoice" Icon={HiNewspaper} />
+					</EachNavSection>
 					<EachNavSection title="Content">
-						<EachNav title="Clients" Icon={HiBuildingStorefront} />
 						<EachNav title="Job Titles" Icon={HiBookmark} />
-						<EachNav title="Projects" Icon={HiDocumentText} />
+						<EachNav title="Skills" Icon={HiStar} />
 						<EachNav title="Users" Icon={HiUsers} />
 					</EachNavSection>
 					<EachNavSection title="Management">
+						<EachNav title="Projects" Icon={HiDocumentText} />
+						<EachNav title="Clients" Icon={HiBuildingStorefront} />
 						<EachNav title="Project Requests" Icon={HiMegaphone} />
 						<EachNav title="Invoice" Icon={HiNewspaper} />
 						<EachNav title="Activity Logs" Icon={HiCircleStack} />
