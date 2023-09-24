@@ -3,3 +3,23 @@
 	/* font-family: 'Raleway', sans-serif !important; */
 	font-family: 'Poppins', sans-serif !important;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1efef00;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #0c3d027c;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0aa9355b;
+}

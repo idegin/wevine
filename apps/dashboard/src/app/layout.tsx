@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 
 import '../../public/assets/css/app.min.css'
-import '../../public/assets/css/bootstrap.min.css'
 import '../../public/assets/css/custom.min.css'
 import '../../public/assets/css/icons.min.css'
+import '../../public/assets/css/bootstrap.min.css'
 
 import './globals.css'
+import SideNav from '@/components/layouts/SideNav'
+import Providers from '@/components/Providers'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -32,12 +34,9 @@ export default function RootLayout({
 				/> */}
 			</head>
 			<body>
-				<div id="layout-wrapper">
-					<div className='app-menu navbar-menu'>
-						
-					</div>
-					<main className="main-content">{children}</main>
-				</div>
+				<Providers>
+					{children}
+				</Providers>
 			</body>
 		</html>
 	)
