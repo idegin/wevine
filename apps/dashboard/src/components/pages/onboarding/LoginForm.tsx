@@ -1,34 +1,42 @@
-import React, { useState } from 'react'
-import { HiEye, HiEyeSlash } from 'react-icons/hi2'
-import { metadata } from 'variables'
+import React from 'react'
 
 type Props = {}
 
 export default function LoginForm({}: Props) {
-	const [showPassword, setShowPassword] = useState(false)
 	return (
 		<div className="p-lg-5 p-4">
 			<div>
 				<h5 className="text-primary">Register Account</h5>
-				<p className="text-muted">
-					Get your Free {metadata.title} account now.
-				</p>
+				<p className="text-muted">Get your Free Velzon account now.</p>
 			</div>
 
 			<div className="mt-4">
 				<form className="needs-validation">
 					<div className="mb-3">
-						<label htmlFor="email" className="form-label">
+						<label htmlFor="useremail" className="form-label">
 							Email <span className="text-danger">*</span>
 						</label>
 						<input
 							type="email"
 							className="form-control"
-							id="email"
+							id="useremail"
 							placeholder="Enter email address"
 							required
 						/>
 						<div className="invalid-feedback">Please enter email</div>
+					</div>
+					<div className="mb-3">
+						<label htmlFor="username" className="form-label">
+							Username <span className="text-danger">*</span>
+						</label>
+						<input
+							type="text"
+							className="form-control"
+							id="username"
+							placeholder="Enter username"
+							required
+						/>
+						<div className="invalid-feedback">Please enter username</div>
 					</div>
 
 					<div className="mb-3">
@@ -37,30 +45,26 @@ export default function LoginForm({}: Props) {
 						</label>
 						<div className="position-relative auth-pass-inputgroup">
 							<input
-								type={showPassword ? 'text' : 'password'}
+								type="password"
 								className="form-control pe-5 password-input"
 								placeholder="Enter password"
 								id="password-input"
 								aria-describedby="passwordInput"
+								pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
 								required
 							/>
 							<button
-								className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon h-100"
+								className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 								type="button"
 								id="password-addon"
-								onClick={() => setShowPassword(!showPassword)}
 							>
-								{showPassword ? (
-									<HiEyeSlash className="align-middle" />
-								) : (
-									<HiEye className="align-middle" />
-								)}
+								<i className="ri-eye-fill align-middle"></i>
 							</button>
 							<div className="invalid-feedback">Please enter password</div>
 						</div>
 					</div>
 
-					{/* <div className="mb-4">
+					<div className="mb-4">
 						<p className="mb-0 fs-12 text-muted fst-italic">
 							By registering you agree to the Velzon{' '}
 							<a
@@ -70,7 +74,23 @@ export default function LoginForm({}: Props) {
 								Terms of Use
 							</a>
 						</p>
-					</div> */}
+					</div>
+
+					<div id="password-contain" className="p-3 bg-light mb-2 rounded">
+						<h5 className="fs-13">Password must contain:</h5>
+						<p id="pass-length" className="invalid fs-12 mb-2">
+							Minimum <b>8 characters</b>
+						</p>
+						<p id="pass-lower" className="invalid fs-12 mb-2">
+							At <b>lowercase</b> letter (a-z)
+						</p>
+						<p id="pass-upper" className="invalid fs-12 mb-2">
+							At least <b>uppercase</b> letter (A-Z)
+						</p>
+						<p id="pass-number" className="invalid fs-12 mb-0">
+							A least <b>number</b> (0-9)
+						</p>
+					</div>
 
 					<div className="mt-4">
 						<button className="btn btn-success w-100" type="submit">
@@ -78,7 +98,7 @@ export default function LoginForm({}: Props) {
 						</button>
 					</div>
 
-					{/* <div className="mt-4 text-center">
+					<div className="mt-4 text-center">
 						<div className="signin-other-title">
 							<h5 className="fs-13 mb-4 title text-muted">
 								Create account with
@@ -111,19 +131,19 @@ export default function LoginForm({}: Props) {
 								<i className="ri-twitter-fill fs-16"></i>
 							</button>
 						</div>
-					</div> */}
+					</div>
 				</form>
 			</div>
 
 			<div className="mt-5 text-center">
 				<p className="mb-0">
-					Are you a client ?{' '}
+					Already have an account ?{' '}
 					<a
 						href="auth-signin-cover.html"
 						className="fw-semibold text-primary text-decoration-underline"
 					>
 						{' '}
-						login here
+						Signin
 					</a>{' '}
 				</p>
 			</div>

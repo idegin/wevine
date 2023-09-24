@@ -1,7 +1,10 @@
+'use client'
 import React from 'react'
 import SideNav from './SideNav'
 import PageContainer from './PageContainer'
 import LoginPage from '../pages/login/LoginPage'
+import { useSelector } from 'react-redux'
+import { AppStore } from '@/app/types/store.types'
 
 type Props = {
 	children: any
@@ -11,9 +14,11 @@ type Props = {
 
 export default function DefaultLayout({ children, name, title }: Props) {
 
-	// if(true){
-	// 	return <LoginPage />
-	// }
+	const { user } = useSelector((store:AppStore) => store.app.auth)
+
+	if (!user) {
+		return <LoginPage />
+	}
 	return (
 		<div id="layout-wrapper">
 			<div
