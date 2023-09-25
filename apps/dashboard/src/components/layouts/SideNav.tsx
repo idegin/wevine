@@ -18,13 +18,15 @@ import {
 } from 'react-icons/hi2'
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
+import { AppStore } from '@/types/store.types'
 
 type Props = {
 	activePage: string
 }
 
-export default function SideNav({activePage}: Props) {
-
+export default function SideNav({ activePage }: Props) {
+	const { user } = useSelector((state: AppStore) => state.app.auth)
 	const router = useRouter()
 
 	return (
@@ -55,11 +57,24 @@ export default function SideNav({activePage}: Props) {
 					px="4"
 				>
 					<EachNavSection title="Pages">
-						<EachNav onClick={() => router.push('/')} title="Overview" Icon={HiChartBar} active={activePage === 'overview'} />
+						<EachNav
+							onClick={() => router.push('/')}
+							title="Overview"
+							Icon={HiChartBar}
+							active={activePage === 'overview'}
+						/>
 						<EachNav onClick={() => {}} title="Gigs" Icon={HiBriefcase} />
 						<EachNav onClick={() => {}} title="Payments" Icon={HiWallet} />
-						<EachNav onClick={() => {}} title="Messages" Icon={HiChatBubbleOvalLeft} />
-						<EachNav onClick={() => {}} title="Notifications" Icon={HiMiniBell} />
+						<EachNav
+							onClick={() => {}}
+							title="Messages"
+							Icon={HiChatBubbleOvalLeft}
+						/>
+						<EachNav
+							onClick={() => {}}
+							title="Notifications"
+							Icon={HiMiniBell}
+						/>
 					</EachNavSection>
 					<EachNavSection title="Clients">
 						<EachNav onClick={() => {}} title="Overview" Icon={HiChartBar} />
@@ -68,15 +83,41 @@ export default function SideNav({activePage}: Props) {
 					</EachNavSection>
 					<EachNavSection title="Content">
 						<EachNav onClick={() => {}} title="Job Titles" Icon={HiBookmark} />
-						<EachNav onClick={() => router.push('/manager/skills')} title="Skills" Icon={HiStar} active={activePage === 'skills'} />
-						<EachNav onClick={() => router.push('/manager/users')} title="Users" Icon={HiUsers} active={activePage === 'users'} />
+						<EachNav
+							onClick={() => router.push('/manager/skills')}
+							title="Skills"
+							Icon={HiStar}
+							active={activePage === 'skills'}
+						/>
+						<EachNav
+							onClick={() => router.push('/manager/users')}
+							title="Users"
+							Icon={HiUsers}
+							active={activePage === 'users'}
+						/>
 					</EachNavSection>
 					<EachNavSection title="Management">
-						<EachNav onClick={() => {}} title="Projects" Icon={HiDocumentText} />
-						<EachNav onClick={() => {}} title="Clients" Icon={HiBuildingStorefront} />
-						<EachNav onClick={() => {}} title="Project Requests" Icon={HiMegaphone} />
+						<EachNav
+							onClick={() => {}}
+							title="Projects"
+							Icon={HiDocumentText}
+						/>
+						<EachNav
+							onClick={() => {}}
+							title="Clients"
+							Icon={HiBuildingStorefront}
+						/>
+						<EachNav
+							onClick={() => {}}
+							title="Project Requests"
+							Icon={HiMegaphone}
+						/>
 						<EachNav onClick={() => {}} title="Invoice" Icon={HiNewspaper} />
-						<EachNav onClick={() => {}} title="Activity Logs" Icon={HiCircleStack} />
+						<EachNav
+							onClick={() => {}}
+							title="Activity Logs"
+							Icon={HiCircleStack}
+						/>
 					</EachNavSection>
 					{/* <EachNavSection title="Admins"></EachNavSection> */}
 				</Flex>
@@ -90,7 +131,9 @@ export default function SideNav({activePage}: Props) {
 					<Flex gap={3} alignItems={'center'} cursor={'pointer'}>
 						<Avatar size="sm" />
 						<Flex alignItems={'flex-start'} flexDirection={'column'}>
-							<Text m="0">First Name</Text>
+							<Text m="0" textTransform={'capitalize'}>
+								{user?.first_name} {user?.last_name[0]}
+							</Text>
 							<Text m="0" fontSize={'xs'}>
 								First Name
 							</Text>

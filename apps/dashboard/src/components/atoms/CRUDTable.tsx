@@ -1,3 +1,4 @@
+import { SkillData } from '@/types/option.types'
 import { Flex, Spinner } from '@chakra-ui/react'
 import React from 'react'
 import { HiMagnifyingGlass } from 'react-icons/hi2'
@@ -6,6 +7,7 @@ type TableItem = {
 	type: 'text' | 'badge'
 	value: string
 	style?: React.CSSProperties
+	label: string
 }
 
 type TableRowData = {
@@ -13,6 +15,7 @@ type TableRowData = {
 	image_url?: string
 	actions?: any
 	items: TableItem[]
+	data: any
 }
 
 type TableColumnData = {
@@ -122,7 +125,10 @@ export default function CRUDTable({
 													{row.items.map((item, i) => {
 														let { value, type } = item
 														return (
-															<td key={`table-row-item-${i}`} style={item.style || {} }>
+															<td
+																key={`table-row-item-${i}`}
+																style={item.style || {}}
+															>
 																<div className="d-flex align-items-center">
 																	{row.image_url && i === 0 ? (
 																		<div className="flex-shrink-0">
@@ -148,7 +154,7 @@ export default function CRUDTable({
 															</td>
 														)
 													})}
-													{crudActions && <td>{crudActions}</td>}
+													{crudActions && <td>{crudActions(row.data)}</td>}
 												</tr>
 											)
 										})}

@@ -26,9 +26,33 @@ export const skillApi = createApi({
 			}),
 			providesTags: ['Skill'],
 		}),
+		createSkill: builder.mutation<any, any>({
+			query: (body) => ({
+				url: `/create`,
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: body,
+			}),
+			invalidatesTags: ['Skill'],
+		}),
+		updateSkill: builder.mutation<any, { id: string | undefined; data: any }>({
+			query: ({ data, id }) => ({
+				url: `/update/${id}`,
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: data,
+			}),
+			invalidatesTags: ['Skill'],
+		}),
 	}),
 })
 
 export const {
-    useGetAllSkillsQuery
+	useGetAllSkillsQuery,
+	useCreateSkillMutation,
+	useUpdateSkillMutation
 } = skillApi

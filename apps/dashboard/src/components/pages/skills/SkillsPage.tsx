@@ -1,17 +1,41 @@
 'use client'
 import CRUDTable from '@/components/atoms/CRUDTable'
 import { SkillData } from '@/types/option.types'
-import React from 'react'
-import { HiFunnel, HiOutlinePlus } from 'react-icons/hi2'
+import React, { useState } from 'react'
+import { HiFunnel, HiOutlinePlus, HiPencil } from 'react-icons/hi2'
 import moment from 'moment'
+import AddSkillPopup from './AddSkillPopup'
+import { Tooltip } from '@chakra-ui/react'
 
 type Props = {
 	skills: SkillData[]
 }
 
 export default function SkillsPage({ skills }: Props) {
+	const [_skills, setSkills] = useState<SkillData[]>(skills)
+	const [showAdd, setShowAdd] = useState(false)
+	const [selectedSkill, setSelectedSkill] = useState(null)
+
 	return (
 		<div>
+			{showAdd && (
+				<AddSkillPopup
+					isOpen={showAdd}
+					onClose={(newSkill, isUpdate) => {
+						setSelectedSkill(null)
+						setShowAdd(false)
+						if (newSkill && !isUpdate) {
+							setSkills([newSkill, ..._skills])
+						} else if (newSkill && isUpdate) {
+							let items = _skills
+							let index = items.findIndex(x => x._id === newSkill._id)
+							items[index] = newSkill;
+							setSkills(items)
+						}
+					}}
+					skillData={selectedSkill}
+				/>
+			)}
 			<CRUDTable
 				columns={[
 					{ title: 'Name' },
@@ -20,21 +44,46 @@ export default function SkillsPage({ skills }: Props) {
 					{ title: 'Updated' },
 				]}
 				selectable
-				rows={skills.map((skill) => ({
-					id: skill.id,
+				crudActions={(theData: any) => {
+					return (
+						<>
+							<Tooltip label="Edit Skill" placement="top" hasArrow>
+								<button
+									className="text-muted"
+									onClick={() => {
+										setSelectedSkill(theData)
+										setShowAdd(true)
+									}}
+								>
+									<HiPencil size={17} />
+								</button>
+							</Tooltip>
+						</>
+					)
+				}}
+				rows={_skills.map((skill) => ({
+					id: skill._id,
 					image_url: skill.icon_url,
+					data: skill,
 					items: [
-						{ type: 'text', value: skill.name, style: { minWidth: '150px' } },
-						{ type: 'text', value: skill.slug },
+						{
+							type: 'text',
+							value: skill.name,
+							style: { minWidth: '150px' },
+							label: 'name',
+						},
+						{ type: 'text', value: skill.slug, label: 'slug' },
 						{
 							type: 'text',
 							value: moment(skill.createdAt).fromNow(),
 							style: { minWidth: '150px' },
+							label: 'createdAt',
 						},
 						{
 							type: 'text',
 							value: moment(skill.updatedAt).fromNow(),
 							style: { minWidth: '150px' },
+							label: 'updatedAt',
 						},
 					],
 				}))}
@@ -53,9 +102,8 @@ export default function SkillsPage({ skills }: Props) {
 						<button
 							type="button"
 							className="btn btn-success bg-theme add-btn d-flex align-items-center"
-							data-bs-toggle="modal"
 							id="create-btn"
-							data-bs-target="#showModal"
+							onClick={() => setShowAdd(true)}
 						>
 							<HiOutlinePlus className="align-bottom me-1" /> Add Skill
 						</button>

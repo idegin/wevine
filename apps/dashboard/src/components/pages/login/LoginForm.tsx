@@ -114,7 +114,7 @@ export default function LoginForm({}: Props) {
 
 					<div className="mt-4">
 						<WButton type="submit" w="full" isLoading={isLoading}>
-							Sign Up
+							Login
 						</WButton>
 					</div>
 

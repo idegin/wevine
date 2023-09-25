@@ -1,5 +1,5 @@
 export interface SkillData {
-	id: string
+	_id: string
 	name: string
 	icon_url: string
 	slug: string
