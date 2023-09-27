@@ -1,7 +1,7 @@
-import { SkillData } from '@/types/option.types'
 import { Flex, HStack, Select, Spinner } from '@chakra-ui/react'
 import React from 'react'
 import { HiMagnifyingGlass } from 'react-icons/hi2'
+import { DebounceInput } from 'react-debounce-input'
 
 type TableItem = {
 	type: 'text' | 'badge'
@@ -31,6 +31,8 @@ type Props = {
 	selectable?: boolean
 	isLoading?: boolean
 	onLimitSelect?: (limit: string) => void
+	defaultCount?: number | string
+	onSearch?: (searchQuery: string) => void
 }
 
 export default function CRUDTable({
@@ -42,6 +44,8 @@ export default function CRUDTable({
 	crudActions,
 	isLoading,
 	onLimitSelect,
+	defaultCount,
+	onSearch
 }: Props) {
 	return (
 		<div className="row">
@@ -50,14 +54,19 @@ export default function CRUDTable({
 					<div className="card-header border-0">
 						<div className="row g-4 align-items-center">
 							<div className="col-sm-3">
-								<div className="search-box">
-									<input
-										type="text"
-										className="form-control search"
-										placeholder="Search for..."
-									/>
-									<HiMagnifyingGlass className="search-icon" />
-								</div>
+								{onSearch && (
+									<div className="search-box">
+										<DebounceInput
+											minLength={3}
+											debounceTimeout={500}
+											type="search"
+											className="form-control search"
+											placeholder="Search for..."
+											onChange={(e) => onSearch(e.target.value.trim())}
+										/>
+										<HiMagnifyingGlass className="search-icon" />
+									</div>
+								)}
 							</div>
 							<div className="col-sm-auto ms-auto">
 								<div className="hstack gap-2">{actionButtons}</div>
@@ -179,6 +188,7 @@ export default function CRUDTable({
 									onChange={(e) =>
 										onLimitSelect ? onLimitSelect(e.target.value) : () => {}
 									}
+									value={defaultCount || 10}
 								>
 									<option value="10">10</option>
 									<option value="20">20</option>

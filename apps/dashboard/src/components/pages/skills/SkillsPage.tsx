@@ -1,6 +1,6 @@
 'use client'
 import CRUDTable from '@/components/atoms/CRUDTable'
-import { SkillData } from '@/types/option.types'
+import { SkillData, SkillDataList } from '@/types/option.types'
 import React, { useEffect, useState } from 'react'
 import { HiPencil } from 'react-icons/hi2'
 import moment from 'moment'
@@ -10,30 +10,47 @@ import SkillActionButtons from './SkillActionButtons'
 import { useRouter } from 'next/navigation'
 
 type Props = {
-	skills: SkillData[]
-	count?: string
+	skillListData: SkillDataList
+	count?: string;
 }
 
 export default function SkillsPage(props: Props) {
-	const { skills, count } = props;
+	const { skillListData, count } = props;
+	const skills = skillListData.results;
 	const [_skills, setSkills] = useState<SkillData[]>([])
 	const [showAdd, setShowAdd] = useState(false)
 	const [selectedSkill, setSelectedSkill] = useState(null)
 	const router = useRouter()
-	const [limit, setLimit] = useState<number | string | null>(null)
+	const [limit, setLimit] = useState<string | null>(count ? count: null)
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const [queryURL, setQueryURL] = useState<string | null>(null)
 
 	useEffect(() => {
-		if (queryURL && limit) {
-			router.push(`/manager/skills/${queryURL}&limit=${limit}`)
-		} else if (limit && !queryURL) {
-			router.push(`/manager/skills/?limit=${limit}`)
-		}else if (queryURL && !limit) {
-			router.push(`/manager/skills/${queryURL}`)
-		}
-	}, [queryURL, limit])
+		// Build an array of query parameters
+		const queryParams = []
 
+		// Add search query to queryParams if it exists
+		if (searchQuery) {
+			queryParams.push(`q=${encodeURIComponent(searchQuery)}`)
+		}
+
+		// Add limit to queryParams if it exists
+		if (limit) {
+			queryParams.push(`limit=${limit}`)
+		}
+
+		// Combine queryParams into a single string
+		const queryStr = queryParams.join('&')
+
+		// Construct the full query URL
+		const fullQueryURL = queryURL
+			? `/manager/skills/${queryURL}&${queryStr}`
+			: `/manager/skills/?${queryStr}`
+
+		// Navigate to the constructed URL
+		router.push(fullQueryURL)
+	}, [queryURL, limit, searchQuery])
 
 	useEffect(() => {
 		setSkills(skills || [])
@@ -60,6 +77,8 @@ export default function SkillsPage(props: Props) {
 				/>
 			)}
 			<CRUDTable
+				onSearch={q => setSearchQuery(q)}
+				defaultCount={limit || 10}
 				onLimitSelect={(limit) => setLimit(limit)}
 				columns={[
 					{ title: 'Name' },
@@ -67,7 +86,7 @@ export default function SkillsPage(props: Props) {
 					{ title: 'Created' },
 					{ title: 'Updated' },
 				]}
-				selectable
+				// selectable
 				crudActions={(rowData?: any) => {
 					return (
 						<>

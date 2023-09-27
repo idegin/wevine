@@ -9,13 +9,15 @@ export const dynamicParams = true
 export default async function page({
 	searchParams,
 }: {
-	searchParams: { sortOrder: string; limit: string; sortBy: string }
+	searchParams: { sortOrder: string; limit: string; sortBy: string; q: string | null }
 }) {
-	let { sortBy, limit, sortOrder } = searchParams
+	let { sortBy, limit, sortOrder, q } = searchParams
+
+	let searchQuery = q ? `&q=${q}`: ''
 
 	let query = !sortBy
-		? `?limit=${limit || 10}`
-		: `?sortBy=${sortBy}&sortOrder=${sortOrder}&limit=${
+		? `?limit=${limit || 10}${searchQuery}`
+		: `?sortBy=${sortBy}&sortOrder=${sortOrder}${searchQuery}&limit=${
 				limit || 10
 		  }`
 
@@ -40,10 +42,11 @@ export default async function page({
 
 	let skills = await getAllSkills()
 
+
 	return (
 		<DefaultLayout title="Skills" name="skills">
 			<Suspense fallback={<p>Loading feed...</p>}>
-				<SkillsPage skills={skills} />
+				<SkillsPage skillListData={skills} count={limit} />
 			</Suspense>
 		</DefaultLayout>
 	)

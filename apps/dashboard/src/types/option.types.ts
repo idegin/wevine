@@ -6,3 +6,9 @@ export interface SkillData {
 	createdAt: string
 	updatedAt: string
 }
+
+export interface SkillDataList {
+	currentPage: 1
+	totalPages: 24
+	results: SkillData[]
+}
