@@ -1,3 +1,4 @@
 export const metadata = {
-    title: "WeVine"
+    title: "WeVine",
+    description: "Global talent network"
 }
