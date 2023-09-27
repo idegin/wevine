@@ -14,9 +14,16 @@ const colors = {
 	theme_darker: '#1F4B3F',
 	theme_light: '#84d19c',
 	theme_lighter: '#F1FCFA',
+
+	primary: '#5BBB7B',
 }
 
-export const theme = extendTheme({ colors })
+export const theme = extendTheme({
+	colors,
+	config: {
+		initialColorMode: 'light', // Set the initial color mode
+	},
+})
 
 export default function Providers({ children }: any) {
 	return (

@@ -1,20 +1,43 @@
 'use client'
 import CRUDTable from '@/components/atoms/CRUDTable'
 import { SkillData } from '@/types/option.types'
-import React, { useState } from 'react'
-import { HiFunnel, HiOutlinePlus, HiPencil } from 'react-icons/hi2'
+import React, { useEffect, useState } from 'react'
+import { HiPencil } from 'react-icons/hi2'
 import moment from 'moment'
 import AddSkillPopup from './AddSkillPopup'
 import { Tooltip } from '@chakra-ui/react'
+import SkillActionButtons from './SkillActionButtons'
+import { useRouter } from 'next/navigation'
 
 type Props = {
 	skills: SkillData[]
+	count?: string
 }
 
-export default function SkillsPage({ skills }: Props) {
-	const [_skills, setSkills] = useState<SkillData[]>(skills)
+export default function SkillsPage(props: Props) {
+	const { skills, count } = props;
+	const [_skills, setSkills] = useState<SkillData[]>([])
 	const [showAdd, setShowAdd] = useState(false)
 	const [selectedSkill, setSelectedSkill] = useState(null)
+	const router = useRouter()
+	const [limit, setLimit] = useState<number | string | null>(null)
+
+	const [queryURL, setQueryURL] = useState<string | null>(null)
+
+	useEffect(() => {
+		if (queryURL && limit) {
+			router.push(`/manager/skills/${queryURL}&limit=${limit}`)
+		} else if (limit && !queryURL) {
+			router.push(`/manager/skills/?limit=${limit}`)
+		}else if (queryURL && !limit) {
+			router.push(`/manager/skills/${queryURL}`)
+		}
+	}, [queryURL, limit])
+
+
+	useEffect(() => {
+		setSkills(skills || [])
+	}, [skills])
 
 	return (
 		<div>
@@ -28,8 +51,8 @@ export default function SkillsPage({ skills }: Props) {
 							setSkills([newSkill, ..._skills])
 						} else if (newSkill && isUpdate) {
 							let items = _skills
-							let index = items.findIndex(x => x._id === newSkill._id)
-							items[index] = newSkill;
+							let index = items.findIndex((x) => x._id === newSkill._id)
+							items[index] = newSkill
 							setSkills(items)
 						}
 					}}
@@ -37,6 +60,7 @@ export default function SkillsPage({ skills }: Props) {
 				/>
 			)}
 			<CRUDTable
+				onLimitSelect={(limit) => setLimit(limit)}
 				columns={[
 					{ title: 'Name' },
 					{ title: 'Slug' },
@@ -44,14 +68,14 @@ export default function SkillsPage({ skills }: Props) {
 					{ title: 'Updated' },
 				]}
 				selectable
-				crudActions={(theData: any) => {
+				crudActions={(rowData?: any) => {
 					return (
 						<>
 							<Tooltip label="Edit Skill" placement="top" hasArrow>
 								<button
 									className="text-muted"
 									onClick={() => {
-										setSelectedSkill(theData)
+										setSelectedSkill(rowData)
 										setShowAdd(true)
 									}}
 								>
@@ -89,27 +113,15 @@ export default function SkillsPage({ skills }: Props) {
 				}))}
 				actionButtons={
 					<>
-						<button
-							type="button"
-							className="btn btn-success bg-theme-lighter text-theme border-0 add-btn d-flex align-items-center"
-							data-bs-toggle="modal"
-							id="create-btn"
-							data-bs-target="#showModal"
-						>
-							<HiFunnel className="align-bottom me-1" />
-							Filter
-						</button>
-						<button
-							type="button"
-							className="btn btn-success bg-theme add-btn d-flex align-items-center"
-							id="create-btn"
-							onClick={() => setShowAdd(true)}
-						>
-							<HiOutlinePlus className="align-bottom me-1" /> Add Skill
-						</button>
+						<SkillActionButtons
+							setShowAdd={setShowAdd}
+							onQueryFilter={(query) => setQueryURL(query)}
+						/>
 					</>
 				}
 			></CRUDTable>
 		</div>
 	)
 }
+
+export const dynamic = 'force-dynamic'

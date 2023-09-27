@@ -1,5 +1,5 @@
 import { SkillData } from '@/types/option.types'
-import { Flex, Spinner } from '@chakra-ui/react'
+import { Flex, HStack, Select, Spinner } from '@chakra-ui/react'
 import React from 'react'
 import { HiMagnifyingGlass } from 'react-icons/hi2'
 
@@ -30,6 +30,7 @@ type Props = {
 	columns: TableColumnData[]
 	selectable?: boolean
 	isLoading?: boolean
+	onLimitSelect?: (limit: string) => void
 }
 
 export default function CRUDTable({
@@ -40,6 +41,7 @@ export default function CRUDTable({
 	selectable,
 	crudActions,
 	isLoading,
+	onLimitSelect,
 }: Props) {
 	return (
 		<div className="row">
@@ -164,28 +166,48 @@ export default function CRUDTable({
 							{children}
 						</div>
 						{!isLoading && (
-							<div className="d-flex justify-content-end mt-3">
-								<div className="pagination-wrap hstack gap-2 d-flex">
-									<a className="page-item pagination-prev disabled" href="#">
-										Previous
-									</a>
-									<ul className="pagination listjs-pagination mb-0">
-										<li className="active">
-											<a className="page" href="#" data-i="1" data-page="8">
-												1
-											</a>
-										</li>
-										<li>
-											<a className="page" href="#" data-i="2" data-page="8">
-												2
-											</a>
-										</li>
-									</ul>
-									<a className="page-item pagination-next" href="#">
-										Next
-									</a>
+							<HStack
+								flexDirection={['column', 'row']}
+								justifyContent={'space-between'}
+								alignItems={'center'}
+								gap={6}
+							>
+								<Select
+									w="130px"
+									size={'sm'}
+									alignSelf={'flex-end'}
+									onChange={(e) =>
+										onLimitSelect ? onLimitSelect(e.target.value) : () => {}
+									}
+								>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</Select>
+								<div className="d-flex justify-content-end mt-3">
+									<div className="pagination-wrap hstack gap-2 d-flex">
+										<a className="page-item pagination-prev disabled" href="#">
+											Previous
+										</a>
+										<ul className="pagination listjs-pagination mb-0">
+											<li className="active">
+												<a className="page" href="#" data-i="1" data-page="8">
+													1
+												</a>
+											</li>
+											<li>
+												<a className="page" href="#" data-i="2" data-page="8">
+													2
+												</a>
+											</li>
+										</ul>
+										<a className="page-item pagination-next" href="#">
+											Next
+										</a>
+									</div>
 								</div>
-							</div>
+							</HStack>
 						)}
 					</div>
 				</div>
